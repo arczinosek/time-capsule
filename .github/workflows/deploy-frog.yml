@@ -1,0 +1,70 @@
+name: Deploy to frog
+
+on:
+  push:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.FROG_PRIVATE_KEY }}
+
+      - name: Setup Node environment
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+        
+      - name: Tests (unit)
+        run: npm test
+
+      - name: Tests (e2e)
+        run: npm run test:e2e
+
+      - name: Build
+        run: npm run build
+
+      - name: Package app
+        run: |
+          VERSION=$(date +'%Y%m%d%H%M%S')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          mkdir package
+          cp -r dist/* package/
+          cp package.json package-lock.json ecosystem.config.js package/
+          tar -czf app_${VERSION}.tar.gz -C package/ .
+
+      - name: Upload and deploy
+        env:
+          FROG_USER: ${{ secrets.FROG_USER }}
+          FROG_HOST: ${{ secrets.FROG_HOST }}
+          FROG_PORT: ${{ secrets.FROG_PORT }}
+          VERSION: ${{ env.VERSION }}
+        run: |
+          ssh-keyscan -p "$FROG_PORT" -H "$FROG_HOST" >> "$HOME/.ssh/known_hosts"
+          ssh $FROG_USER@$FROG_HOST -p $FROG_PORT << EOF
+            mkdir -p /opt/time-capsule/releases
+          EOF
+
+          scp -P $FROG_PORT app_${VERSION}.tar.gz $FROG_USER@$FROG_HOST:/opt/time-capsule/
+
+          ssh $FROG_USER@$FROG_HOST -p $FROG_PORT << EOF
+            mkdir -p /opt/time-capsule/releases/${VERSION}
+            tar -xzf /opt/time-capsule/app_${VERSION}.tar.gz -C /opt/time-capsule/releases/${VERSION}/
+            rm /opt/time-capsule/app_${VERSION}.tar.gz
+            cd /opt/time-capsule/releases/${VERSION}/
+            npm ci --omit=dev 
+            ln -sfn /opt/time-capsule/releases/${VERSION} /opt/time-capsule/current
+            pm2 startOrReload /opt/time-capsule/current/ecosystem.config.js --cwd /opt/time-capsule/current
+          EOF
