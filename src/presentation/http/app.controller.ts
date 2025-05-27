@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { HelloWorldHandler } from '../../application/handler/hello-world.handler';
-import { formatDateTime } from '../utils/date.util';
+import { HelloWorldHandler } from '../../application/handlers/hello-world.handler';
+import { formatDateTime } from '../utils';
 
 @Controller()
 export class AppController {
