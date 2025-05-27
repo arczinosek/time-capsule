@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { HelloWorldHandler } from '../../application/handlers/hello-world.handler';
+import { HelloWorldHandler } from '@/application/handlers/hello-world.handler';
 import { formatDateTime } from '../utils';
 
 @Controller()

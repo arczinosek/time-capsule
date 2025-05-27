@@ -1,5 +1,5 @@
 import { AppController } from './app.controller';
-import { HelloWorldHandler } from '../../application/handlers/hello-world.handler';
+import { HelloWorldHandler } from '@/application/handlers/hello-world.handler';
 
 describe('AppController', () => {
   const CURRENT_TIME = '2025-05-16T21:05:54';
