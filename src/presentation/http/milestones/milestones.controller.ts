@@ -2,23 +2,61 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Logger,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 
-import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
 import { CreateMilestoneCommand } from '@/application/commands';
+import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
+import { FindMilestonesHandler } from '@/application/handlers/find-milestones.handler';
+import { GetMilestoneHandler } from '@/application/handlers/get-milestone.handler';
+import { FindMilestonesQuery, GetMilestoneQuery } from '@/application/queries';
 import { InvalidPeriodError } from '@/domain/errors';
 
-import { CreateMilestoneRequest } from '../requests';
+import { CreateMilestoneRequest, FindMilestonesRequest } from '../requests';
 import { MilestoneResponse } from '../responses';
 
 @Controller('/api/milestones')
 export class MilestonesController {
   constructor(
     private readonly createMilestoneHandler: CreateMilestoneHandler,
+    private readonly findMilestonesHandler: FindMilestonesHandler,
+    private readonly getMilestoneHandler: GetMilestoneHandler,
     private readonly logger: Logger
   ) {}
+
+  @Get()
+  async find(@Query() { page, limit }: FindMilestonesRequest) {
+    try {
+      const milestones = await this.findMilestonesHandler.handle(
+        new FindMilestonesQuery(page, limit)
+      );
+
+      return milestones.map((entity) =>
+        MilestoneResponse.createFromEntity(entity)
+      );
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  @Get(':id')
+  async get(@Param('id', ParseIntPipe) id: number) {
+    const milestone = await this.getMilestoneHandler.handle(
+      new GetMilestoneQuery(id)
+    );
+
+    if (!milestone) {
+      throw new NotFoundException('Milestone not found!');
+    }
+
+    return MilestoneResponse.createFromEntity(milestone);
+  }
 
   @Post()
   async create(
@@ -49,7 +87,7 @@ export class MilestonesController {
         });
 
         throw new BadRequestException(
-          'Invalid period - finish date can not be before start date'
+          'Invalid period: finish date can not be before start date'
         );
       }
 

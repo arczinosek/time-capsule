@@ -1,16 +1,22 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { BadRequestException, Logger } from '@nestjs/common';
 
-import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
-
-import { MilestonesController } from './milestones.controller';
-import { Milestone } from '@/domain/entities/milestone.entity';
-import { MilestoneResponse } from '../responses';
 import { CreateMilestoneCommand } from '@/application/commands';
+import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
+import { FindMilestonesHandler } from '@/application/handlers/find-milestones.handler';
+import { GetMilestoneHandler } from '@/application/handlers/get-milestone.handler';
+import { FindMilestonesQuery } from '@/application/queries';
+import { Milestone } from '@/domain/entities/milestone.entity';
 import { InvalidPeriodError } from '@/domain/errors';
 
+import { FindMilestonesRequest } from '../requests';
+import { MilestoneResponse } from '../responses';
+import { MilestonesController } from './milestones.controller';
+
 describe('MilestonesController', () => {
-  let handlerMock: DeepMocked<CreateMilestoneHandler>;
+  let createMilestoneHandlerMock: DeepMocked<CreateMilestoneHandler>;
+  let findMilestonesHandlerMock: DeepMocked<FindMilestonesHandler>;
+  let getMilestoneHandlerMock: DeepMocked<GetMilestoneHandler>;
   let loggerMock: DeepMocked<Logger>;
   let controller: MilestonesController;
 
@@ -19,9 +25,16 @@ describe('MilestonesController', () => {
   });
 
   beforeEach(() => {
-    handlerMock = createMock<CreateMilestoneHandler>();
+    createMilestoneHandlerMock = createMock<CreateMilestoneHandler>();
+    findMilestonesHandlerMock = createMock<FindMilestonesHandler>();
+    getMilestoneHandlerMock = createMock<GetMilestoneHandler>();
     loggerMock = createMock<Logger>();
-    controller = new MilestonesController(handlerMock, loggerMock);
+    controller = new MilestonesController(
+      createMilestoneHandlerMock,
+      findMilestonesHandlerMock,
+      getMilestoneHandlerMock,
+      loggerMock
+    );
   });
 
   afterEach(() => {
@@ -30,6 +43,44 @@ describe('MilestonesController', () => {
 
   afterAll(() => {
     jest.useRealTimers();
+  });
+
+  describe('find', () => {
+    it('should return array with MilestoneResponse for every found milestone', async () => {
+      const firstEventDate = new Date('2025-05-10');
+      const secondEventDate = new Date('2025-05-28');
+
+      const firstEvent = Milestone.create(
+        'first found',
+        '',
+        firstEventDate,
+        firstEventDate
+      );
+      const secondEvent = Milestone.create(
+        'second found',
+        'desc',
+        secondEventDate,
+        secondEventDate
+      );
+
+      const findHandlerSpy = jest
+        .spyOn(findMilestonesHandlerMock, 'handle')
+        .mockResolvedValueOnce([firstEvent, secondEvent]);
+
+      const request = new FindMilestonesRequest();
+
+      const expectedResponse = [
+        MilestoneResponse.createFromEntity(firstEvent),
+        MilestoneResponse.createFromEntity(secondEvent),
+      ];
+
+      const response = await controller.find(request);
+
+      expect(response).toStrictEqual(expectedResponse);
+      expect(findHandlerSpy).toHaveBeenCalledWith(
+        new FindMilestonesQuery(request.page, request.limit)
+      );
+    });
   });
 
   describe('create', () => {
@@ -52,7 +103,7 @@ describe('MilestonesController', () => {
         MilestoneResponse.createFromEntity(milestoneEntity);
 
       const handleSpy = jest
-        .spyOn(handlerMock, 'handle')
+        .spyOn(createMilestoneHandlerMock, 'handle')
         .mockResolvedValueOnce(milestoneEntity);
 
       const response = await controller.create(request);
@@ -78,7 +129,7 @@ describe('MilestonesController', () => {
       };
 
       jest
-        .spyOn(handlerMock, 'handle')
+        .spyOn(createMilestoneHandlerMock, 'handle')
         .mockRejectedValueOnce(new InvalidPeriodError());
 
       await expect(controller.create(request)).rejects.toThrow(

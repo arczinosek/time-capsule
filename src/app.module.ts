@@ -1,12 +1,15 @@
 import { Logger, Module } from '@nestjs/common';
-import { AppController } from './presentation/http/app.controller';
-import { HelloWorldHandler } from './application/handlers/hello-world.handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'db/data-source';
-import { MilestonesController } from './presentation/http/milestones/milestones.controller';
+
 import { CreateMilestoneHandler } from './application/handlers/create-milestone.handler';
-import { MilestoneRepository } from './infrastructure/repositories/milestone.repository';
+import { FindMilestonesHandler } from './application/handlers/find-milestones.handler';
+import { GetMilestoneHandler } from './application/handlers/get-milestone.handler';
+import { HelloWorldHandler } from './application/handlers/hello-world.handler';
 import { Milestone } from './domain/entities/milestone.entity';
+import { MilestoneRepository } from './infrastructure/repositories/milestone.repository';
+import { AppController } from './presentation/http/app.controller';
+import { MilestonesController } from './presentation/http/milestones/milestones.controller';
 
 @Module({
   imports: [
@@ -19,8 +22,10 @@ import { Milestone } from './domain/entities/milestone.entity';
       provide: Logger,
       useValue: new Logger(),
     },
-    HelloWorldHandler,
     CreateMilestoneHandler,
+    FindMilestonesHandler,
+    GetMilestoneHandler,
+    HelloWorldHandler,
     MilestoneRepository,
   ],
 })
