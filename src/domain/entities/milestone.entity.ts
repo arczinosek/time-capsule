@@ -48,8 +48,8 @@ export class Milestone {
   }
 
   updateTitle(title: string) {
-    if (title.length < 3) {
-      throw new Error('title should be at least 3 characters long');
+    if (!title.length) {
+      throw new Error('title can not be empty');
     }
 
     if (title.length > 127) {
