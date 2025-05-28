@@ -11,7 +11,7 @@ export class FindMilestonesQuery {
 
     if (limit > FindMilestonesQuery.MAX_LIMIT) {
       throw new Error(
-        `Parameter 'limit' is greater than '${FindMilestonesQuery.MAX_LIMIT}'`
+        `Parameter 'limit' is greater than allowed '${FindMilestonesQuery.MAX_LIMIT}'`
       );
     }
 

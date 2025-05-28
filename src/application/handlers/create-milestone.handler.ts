@@ -22,7 +22,7 @@ export class CreateMilestoneHandler {
 
     const res = await this.milestoneRepository.save(milestone);
 
-    this.logger.log('milestone created', {
+    this.logger.log('Milestone created', {
       id: res.id,
       createdAt: res.getCreatedAt(),
     });
