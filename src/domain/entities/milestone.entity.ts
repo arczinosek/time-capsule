@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { InvalidPeriodError } from '../errors';
 
 @Entity({ name: 'milestones' })
