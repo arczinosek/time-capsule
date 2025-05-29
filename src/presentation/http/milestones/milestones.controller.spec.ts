@@ -1,11 +1,11 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
-import { BadRequestException, Logger } from '@nestjs/common';
+import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 
 import { CreateMilestoneCommand } from '@/application/commands';
 import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
 import { FindMilestonesHandler } from '@/application/handlers/find-milestones.handler';
 import { GetMilestoneHandler } from '@/application/handlers/get-milestone.handler';
-import { FindMilestonesQuery } from '@/application/queries';
+import { FindMilestonesQuery, GetMilestoneQuery } from '@/application/queries';
 import { Milestone } from '@/domain/entities/milestone.entity';
 import { InvalidPeriodError } from '@/domain/errors';
 
@@ -80,6 +80,38 @@ describe('MilestonesController', () => {
       expect(findHandlerSpy).toHaveBeenCalledWith(
         new FindMilestonesQuery(request.page, request.limit)
       );
+    });
+  });
+
+  describe('get', () => {
+    it('should return MilestoneResponse when handler return entity', async () => {
+      const entity = Milestone.create(
+        'title',
+        'description',
+        new Date(),
+        new Date()
+      );
+      const expectedResponse = MilestoneResponse.createFromEntity(entity);
+
+      const handlerSpy = jest
+        .spyOn(getMilestoneHandlerMock, 'handle')
+        .mockResolvedValueOnce(entity);
+
+      const result = await controller.get(23);
+
+      expect(result).toStrictEqual(expectedResponse);
+      expect(handlerSpy).toHaveBeenCalledWith(new GetMilestoneQuery(23));
+    });
+
+    it('should throw NotFoundException when handler return null', async () => {
+      const handlerSpy = jest
+        .spyOn(getMilestoneHandlerMock, 'handle')
+        .mockResolvedValueOnce(null);
+
+      await expect(controller.get(59)).rejects.toThrow(
+        new NotFoundException('Milestone not found!')
+      );
+      expect(handlerSpy).toHaveBeenCalledWith(new GetMilestoneQuery(59));
     });
   });
 
