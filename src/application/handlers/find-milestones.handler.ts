@@ -13,7 +13,7 @@ export class FindMilestonesHandler {
 
   async handle({ limit, page }: FindMilestonesQuery) {
     try {
-      return this.repository.find({
+      return await this.repository.find({
         take: limit,
         skip: (page - 1) * limit,
       });

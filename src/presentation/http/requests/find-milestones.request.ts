@@ -13,7 +13,7 @@ export class FindMilestonesRequest {
   @Type(() => Number)
   @IsInt()
   @IsPositive()
-  @Max(FindMilestonesQuery.MAX_LIMIT)
+  @Max(FindMilestonesQuery.LIMIT_MAX)
   @IsOptional()
-  limit = 10;
+  limit = FindMilestonesQuery.LIMIT_DEFAULT;
 }
