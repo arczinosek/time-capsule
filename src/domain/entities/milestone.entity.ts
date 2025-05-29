@@ -10,10 +10,12 @@ import { InvalidPeriodError } from '../errors';
 
 @Entity({ name: 'milestones' })
 export class Milestone {
+  private static readonly TITLE_MAX_LEN = 127;
+
   @PrimaryGeneratedColumn({ unsigned: true })
   public readonly id: number;
 
-  @Column({ length: 127 })
+  @Column({ length: Milestone.TITLE_MAX_LEN })
   private title: string;
 
   @Column({ type: 'text' })
@@ -50,11 +52,13 @@ export class Milestone {
 
   updateTitle(title: string) {
     if (!title.length) {
-      throw new Error('title can not be empty');
+      throw new Error(`title can not be empty`);
     }
 
-    if (title.length > 127) {
-      throw new Error('title is too long');
+    if (title.length > Milestone.TITLE_MAX_LEN) {
+      throw new Error(
+        `title is longer than allowed '${Milestone.TITLE_MAX_LEN}'`
+      );
     }
 
     this.title = title;
@@ -81,8 +85,8 @@ export class Milestone {
       throw new InvalidPeriodError();
     }
 
-    this.dateStart = dateStart;
-    this.dateFinish = dateFinish;
+    this.dateStart = new Date(dateStart);
+    this.dateFinish = new Date(dateFinish);
 
     return this;
   }
