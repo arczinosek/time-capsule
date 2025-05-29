@@ -7,7 +7,7 @@ export class FindMilestonesQuery {
 
   constructor(page = 1, limit = FindMilestonesQuery.LIMIT_DEFAULT) {
     if (limit < 1) {
-      throw new Error(`Parameter 'limit' is not positive`);
+      throw new Error(`Parameter 'limit' is less than 1`);
     }
 
     if (limit > FindMilestonesQuery.LIMIT_MAX) {
