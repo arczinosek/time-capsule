@@ -2,7 +2,7 @@ FROM alpine:3.21.2 AS os
 RUN apk update && apk upgrade && apk add npm
 
 FROM os AS build
-COPY src test nest-cli.json package.json package-lock.json tsconfig.json tsconfig.build.json /build
+COPY src nest-cli.json package.json package-lock.json tsconfig.json tsconfig.build.json /build/
 WORKDIR /build
 RUN npm ci && npm run build
 

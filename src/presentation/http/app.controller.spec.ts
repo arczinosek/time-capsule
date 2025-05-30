@@ -1,5 +1,6 @@
+import { HelloWorldHandler } from '@/application/handlers/hello-world.handler';
+
 import { AppController } from './app.controller';
-import { HelloWorldHandler } from '../../application/handler/hello-world.handler';
 
 describe('AppController', () => {
   const CURRENT_TIME = '2025-05-16T21:05:54';
@@ -29,7 +30,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return "Hello World!"', () => {
       expect(appController.getHello()).toBe(
-        `Hello, world! @ 09.05.2025, 09:01:06`,
+        `Hello, world! @ 09.05.2025, 09:01:06`
       );
     });
   });
