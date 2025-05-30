@@ -1,6 +1,7 @@
 services:
   app:
     container_name: timecapsule_api
+    profiles: [app]
     build:
       context: .
     environment:
