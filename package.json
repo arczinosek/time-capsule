@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:lint": "eslint \"{src,test}/**/*.ts\"",
     "typeorm": "typeorm-ts-node-commonjs -d db/data-source.ts",
+    "db:refresh": "npm run typeorm schema:drop && npm run migration:run",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "npm run typeorm migration:generate",
     "migration:run": "npm run typeorm migration:run",
