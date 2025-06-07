@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { Milestone } from '@/domain/entities/milestone.entity';
-import { MilestoneRepository } from '@/infrastructure/repositories/milestone.repository';
-
+import { Milestone } from '../../domain/entities/milestone.entity';
+import { MilestoneRepository } from '../../infrastructure/repositories/milestone.repository';
 import { CreateMilestoneCommand } from '../commands';
 
 @Injectable()

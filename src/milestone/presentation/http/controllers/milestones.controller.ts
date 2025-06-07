@@ -11,13 +11,15 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { CreateMilestoneCommand } from '@/application/commands';
-import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
-import { FindMilestonesHandler } from '@/application/handlers/find-milestones.handler';
-import { GetMilestoneHandler } from '@/application/handlers/get-milestone.handler';
-import { FindMilestonesQuery, GetMilestoneQuery } from '@/application/queries';
-import { InvalidPeriodError } from '@/domain/errors';
-
+import { CreateMilestoneCommand } from '../../../application/commands';
+import { CreateMilestoneHandler } from '../../../application/handlers/create-milestone.handler';
+import { FindMilestonesHandler } from '../../../application/handlers/find-milestones.handler';
+import { GetMilestoneHandler } from '../../../application/handlers/get-milestone.handler';
+import {
+  FindMilestonesQuery,
+  GetMilestoneQuery,
+} from '../../../application/queries';
+import { InvalidPeriodError } from '../../../domain/errors';
 import { CreateMilestoneRequest, FindMilestonesRequest } from '../requests';
 import { MilestoneResponse } from '../responses';
 
@@ -37,9 +39,11 @@ export class MilestonesController {
         new FindMilestonesQuery(page, limit)
       );
 
-      return milestones.map((entity) =>
-        MilestoneResponse.createFromEntity(entity)
-      );
+      return {
+        milestones: milestones.map((entity) =>
+          MilestoneResponse.createFromEntity(entity)
+        ),
+      };
     } catch (error) {
       throw new BadRequestException(error);
     }

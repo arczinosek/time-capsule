@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsPositive, Max } from 'class-validator';
 
-import { FindMilestonesQuery } from '@/application/queries';
+import { FindMilestonesQuery } from '../../../application/queries';
 
 export class FindMilestonesRequest {
   @Type(() => Number)

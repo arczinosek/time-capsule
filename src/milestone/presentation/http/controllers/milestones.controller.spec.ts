@@ -1,14 +1,16 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 
-import { CreateMilestoneCommand } from '@/application/commands';
-import { CreateMilestoneHandler } from '@/application/handlers/create-milestone.handler';
-import { FindMilestonesHandler } from '@/application/handlers/find-milestones.handler';
-import { GetMilestoneHandler } from '@/application/handlers/get-milestone.handler';
-import { FindMilestonesQuery, GetMilestoneQuery } from '@/application/queries';
-import { Milestone } from '@/domain/entities/milestone.entity';
-import { InvalidPeriodError } from '@/domain/errors';
-
+import { CreateMilestoneCommand } from '../../../application/commands';
+import { CreateMilestoneHandler } from '../../../application/handlers/create-milestone.handler';
+import { FindMilestonesHandler } from '../../../application/handlers/find-milestones.handler';
+import { GetMilestoneHandler } from '../../../application/handlers/get-milestone.handler';
+import {
+  FindMilestonesQuery,
+  GetMilestoneQuery,
+} from '../../../application/queries';
+import { Milestone } from '../../../domain/entities/milestone.entity';
+import { InvalidPeriodError } from '../../../domain/errors';
 import { FindMilestonesRequest } from '../requests';
 import { MilestoneResponse } from '../responses';
 import { MilestonesController } from './milestones.controller';
@@ -69,10 +71,12 @@ describe('MilestonesController', () => {
 
       const request = new FindMilestonesRequest();
 
-      const expectedResponse = [
-        MilestoneResponse.createFromEntity(firstEvent),
-        MilestoneResponse.createFromEntity(secondEvent),
-      ];
+      const expectedResponse = {
+        milestones: [
+          MilestoneResponse.createFromEntity(firstEvent),
+          MilestoneResponse.createFromEntity(secondEvent),
+        ],
+      };
 
       const response = await controller.find(request);
 

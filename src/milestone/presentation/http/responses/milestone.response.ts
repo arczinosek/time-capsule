@@ -1,6 +1,6 @@
-import { Milestone } from '@/domain/entities/milestone.entity';
+import { formatDate, formatDateTime } from '@/shared/utils';
 
-import { formatDate, formatDateTime } from '../../utils';
+import { Milestone } from '../../../domain/entities/milestone.entity';
 
 export class MilestoneResponse {
   constructor(

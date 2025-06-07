@@ -1,9 +1,8 @@
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Logger } from '@nestjs/common';
 
-import { Milestone } from '@/domain/entities/milestone.entity';
-import { MilestoneRepository } from '@/infrastructure/repositories/milestone.repository';
-
+import { Milestone } from '../../domain/entities/milestone.entity';
+import { MilestoneRepository } from '../../infrastructure/repositories/milestone.repository';
 import { FindMilestonesQuery } from '../queries';
 import { FindMilestonesHandler } from './find-milestones.handler';
 

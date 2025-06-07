@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { MilestoneRepository } from '@/infrastructure/repositories/milestone.repository';
-
+import { MilestoneRepository } from '../../infrastructure/repositories/milestone.repository';
 import { FindMilestonesQuery } from '../queries';
 
 @Injectable()
