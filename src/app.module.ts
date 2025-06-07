@@ -1,7 +1,7 @@
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import dataSourceOptions from '../db/data-source';
+import { dataSourceOptions } from '../db/data-source';
 import { HelloModule } from './hello/hello.module';
 import { MilestoneModule } from './milestone/milestone.module';
 
