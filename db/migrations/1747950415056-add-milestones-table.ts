@@ -1,10 +1,10 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddMilestonesTable1747950415056 implements MigrationInterface {
-    name = 'AddMilestonesTable1747950415056'
+  name = 'AddMilestonesTable1747950415056';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE \`milestones\` (
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`CREATE TABLE \`milestones\` (
           \`id\` int UNSIGNED NOT NULL AUTO_INCREMENT,
           \`title\` varchar(127) NOT NULL,
           \`description\` text NOT NULL,
@@ -14,10 +14,9 @@ export class AddMilestonesTable1747950415056 implements MigrationInterface {
           \`updatedAt\` datetime(6) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
           PRIMARY KEY (\`id\`)
         ) ENGINE=InnoDB`);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP TABLE \`milestones\``);
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE \`milestones\``);
+  }
 }

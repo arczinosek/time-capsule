@@ -1,7 +1,7 @@
 services:
   app:
     container_name: timecapsule_api
-    profiles: [app]
+    profiles: ['dev']
     build:
       context: .
     environment:
@@ -9,6 +9,9 @@ services:
       DATABASE_USERNAME: timecapsule
       DATABASE_PASSWORD: eluspacemit
       DATABASE_NAME: timecapsule
+    volumes:
+      - .:/app
+    entrypoint: 'npm run start:dev'
   mariadb:
     container_name: timecapsule_db
     image: mariadb:10.5.23
