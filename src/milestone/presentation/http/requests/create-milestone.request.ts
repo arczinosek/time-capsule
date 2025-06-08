@@ -6,28 +6,40 @@ import {
   MinLength,
 } from 'class-validator';
 
-const REGEX_DATE = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+const REGEX_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
 export class CreateMilestoneRequest {
   @IsString()
   @MinLength(3)
   @MaxLength(127)
-  title: string;
+  readonly title: string;
 
   @IsString()
-  description: string;
+  readonly description: string;
 
   @IsDateString(
     { strict: true },
     { message: 'dateStart must be a valid date string' }
   )
   @Matches(REGEX_DATE, { message: 'dateStart must be a valid date string' })
-  dateStart: string;
+  readonly dateStart: string;
 
   @IsDateString(
     { strict: true },
     { message: 'dateFinish must be a valid date string' }
   )
   @Matches(REGEX_DATE, { message: 'dateFinish must be a valid date string' })
-  dateFinish: string;
+  readonly dateFinish: string;
+
+  constructor(
+    title: string,
+    description: string,
+    dateStart: string,
+    dateFinish: string
+  ) {
+    this.title = title;
+    this.description = description;
+    this.dateStart = dateStart;
+    this.dateFinish = dateFinish;
+  }
 }
