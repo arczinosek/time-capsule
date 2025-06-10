@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
@@ -17,7 +17,3 @@ export const dataSourceOptions: DataSourceOptions = {
   synchronize: false,
   logging: true,
 };
-
-const dataSource = new DataSource(dataSourceOptions);
-
-export default dataSource;
