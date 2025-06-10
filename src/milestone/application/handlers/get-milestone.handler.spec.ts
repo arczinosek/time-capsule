@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Logger } from '@nestjs/common';
 
@@ -28,7 +29,7 @@ describe('GetMilestoneHandler', () => {
         const findSpy = jest
           .spyOn(repositoryMock, 'findOneBy')
           .mockResolvedValueOnce(expectedResult);
-        const query = new GetMilestoneQuery(666);
+        const query = new GetMilestoneQuery(faker.number.int({ min: 1 }));
 
         const result = await handler.handle(query);
 
@@ -42,7 +43,7 @@ describe('GetMilestoneHandler', () => {
         .spyOn(repositoryMock, 'findOneBy')
         .mockRejectedValueOnce(new Error('repository error'));
       const logWarnSpy = jest.spyOn(loggerMock, 'warn');
-      const query = new GetMilestoneQuery(123);
+      const query = new GetMilestoneQuery(faker.number.int({ min: 1 }));
 
       await expect(handler.handle(query)).rejects.toThrow();
       expect(findSpy).toHaveBeenCalledWith({ id: query.id });

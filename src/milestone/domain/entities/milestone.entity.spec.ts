@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 import { InvalidPeriodError } from '../errors';
 import { Milestone } from './milestone.entity';
 
@@ -18,7 +20,7 @@ describe('Milestone', () => {
     });
 
     it('should throw Error when title is too long', () => {
-      const title = 'x'.repeat(128);
+      const title = faker.string.sample({ min: 128, max: 256 });
 
       expect(() => Milestone.create(title, '', new Date(), new Date())).toThrow(
         new Error(`title is longer than allowed '127'`)
@@ -51,7 +53,8 @@ describe('Milestone', () => {
     });
 
     it('should throw Error when new title is too long', () => {
-      const tooLongTitle = 'n'.repeat(128);
+      const tooLongTitle = faker.string.symbol({ min: 128, max: 256 });
+
       expect(() => milestone.updateTitle(tooLongTitle)).toThrow(
         new Error(`title is longer than allowed '127'`)
       );
@@ -61,8 +64,8 @@ describe('Milestone', () => {
   describe('updatePeriod', () => {
     it('should throw InvalidPeriodError when finishDate is before startDate', () => {
       const milestone = createValidMilestone();
-      const start = new Date('2025-05-30');
-      const finish = new Date('2025-05-29');
+      const start = faker.date.past();
+      const finish = faker.date.recent({ refDate: start });
 
       expect(() => milestone.updatePeriod(start, finish)).toThrow(
         new InvalidPeriodError()
