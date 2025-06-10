@@ -1,10 +1,21 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './presentation/http/app.controller';
-import { HelloWorldHandler } from './application/handler/hello-world.handler';
+import { Logger, Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { dataSourceOptions } from '../db/data-source';
+import { HelloModule } from './hello/hello.module';
+import { MilestoneModule } from './milestone/milestone.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [HelloWorldHandler],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOptions),
+    MilestoneModule,
+    HelloModule,
+  ],
+  providers: [
+    {
+      provide: Logger,
+      useValue: new Logger(),
+    },
+  ],
 })
 export class AppModule {}

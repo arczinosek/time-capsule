@@ -57,18 +57,37 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Database
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Create blank migration
+npm run migration:create db/migrations/{name}
+
+# Generate migration
+npm run migration:generate db/migrations/{name}
+
+# Run pending migrations
+npm run migration:run
+
+# Revert last migration
+npm run migration:revert
+
+# Show status of migrations
+npm run migration:show
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Commands to run with `npm run`
+
+```bash
+npm run typeorm query "{query}"
+npm run typeorm schema:drop
+```
+
+If you have error "Missing required argument: dataSource" please use `npx typeorm` version.
+
+## Deployment
+
+Deployment is running automatically after push to `master` branch.
 
 ## Resources
 
@@ -83,16 +102,6 @@ Check out a few resources that may come in handy when working with NestJS:
 - To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
 - Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Time capsule is [MIT licensed](https://github.com/arczinosek/time-capsule/blob/master/LICENSE).

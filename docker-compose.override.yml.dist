@@ -2,3 +2,6 @@ services:
   app:
     ports:
       - 3000:3000
+  mariadb:
+    ports:
+      - 3306:3306

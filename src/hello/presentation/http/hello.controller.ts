@@ -1,9 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
-import { HelloWorldHandler } from '../../application/handler/hello-world.handler';
-import { formatDateTime } from '../utils/date.util';
+
+import { formatDateTime } from '@/shared/utils';
+
+import { HelloWorldHandler } from '../../application/handlers/hello-world.handler';
 
 @Controller()
-export class AppController {
+export class HelloController {
   constructor(private readonly helloWorldHandler: HelloWorldHandler) {}
 
   @Get()
