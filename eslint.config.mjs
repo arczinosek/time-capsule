@@ -1,13 +1,13 @@
 // @ts-check
 import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'test/jest-e2e.config.ts'],
+    ignores: ['test/jest-e2e.config.ts'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
