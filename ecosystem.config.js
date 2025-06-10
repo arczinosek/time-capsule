@@ -2,7 +2,7 @@ module.exports = {
   apps : [
     {
       name: 'time-capsule',
-      script: './main.js',
+      script: './src/main.js',
       cwd: '/opt/time-capsule/current',
       error_file: '/opt/time-capsule/logs/app.err.log',
       out_file: '/opt/time-capsule/logs/app.out.log',
